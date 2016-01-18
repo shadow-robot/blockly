@@ -49,18 +49,11 @@
 <script src="../blocks/colour.js"></script>
 <script src="../blocks/variables.js"></script>
 <script src="../blocks/procedures.js"></script>
-<!-- Load the Google Drive SDK Realtime libraries. -->
-<script src="https://apis.google.com/js/api.js"></script>
 <script>
 'use strict';
 // Depending on the URL argument, render as LTR or RTL.
 var rtl = (document.location.search == '?rtl');
 var workspace = null;
-
-function enableRealtimeSpecificUi() {
-  var realtimeDiv = document.getElementById('realtime');
-  realtimeDiv.display = 'block';
-}
 
 function start() {
   var toolbox = document.getElementById('toolbox');
@@ -73,28 +66,21 @@ function start() {
               length: 3,
               colour: '#ccc',
               snap: true},
+           maxBlocks: Infinity,
            media: '../media/',
            readOnly: false,
-           realtime: false,
-           realtimeOptions:
-             {clientId: 'YOUR CLIENT ID GOES HERE',
-              chatbox: {elementId: 'chatbox'},
-              collabElementId: 'collaborators'},
            rtl: rtl,
            scrollbars: true,
            toolbox: toolbox,
            zoom:
-             {enabled: true,
-              controls: true,
+             {controls: true,
               wheel: true,
+              startScale: 1.0,
               maxScale: 4,
               minScale: .25,
               scaleSpeed: 1.1
              },
           });
-  if (Blockly.Realtime.isEnabled()) {
-    enableRealtimeSpecificUi();
-  }
 }
 
 function toXml() {
@@ -125,7 +111,7 @@ function airstrike(n) {
   }
   for (var i = 0; i < n; i++) {
     var prototype = prototypes[Math.floor(Math.random() * prototypes.length)];
-    var block = Blockly.Block.obtain(workspace, prototype);
+    var block = workspace.newBlock(prototype);
     block.initSvg();
     block.getSvgRoot().setAttribute('transform', 'translate(' +
         Math.round(Math.random() * 450 + 40) + ', ' +
@@ -227,7 +213,7 @@ h1 {
       <block type="logic_operation"></block>
       <block type="logic_negate"></block>
       <block type="logic_boolean"></block>
-      <block type="logic_null"></block>
+      <block type="logic_null" disabled="true"></block>
       <block type="logic_ternary"></block>
     </category>
     <category name="Loops" colour="120">
@@ -238,6 +224,7 @@ h1 {
           </shadow>
         </value>
       </block>
+      <block type="controls_repeat" disabled="true"></block>
       <block type="controls_whileUntil"></block>
       <block type="controls_for">
         <value name="FROM">
@@ -260,7 +247,7 @@ h1 {
       <block type="controls_flow_statements"></block>
     </category>
     <category name="Math" colour="230">
-      <block type="math_number"></block>
+      <block type="math_number" gap="32"></block>
       <block type="math_arithmetic">
         <value name="A">
           <shadow type="math_number">
@@ -559,29 +546,5 @@ h1 {
     <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
   </p>
 
-  <!-- Realtime setup buttons. -->
-
-  <div id="realtime" style="display: none">
-
-    <p>Test realtime collaboration by opening
-      <a target="_blank" href="#" onmouseover="this.href = window.location.href">
-        this link</a> in a separate browser window or tab and they will be
-      synchronized.  You can even share the link with a friend!.</p>
-
-    <br>
-    <br>
-
-    <!-- Undo and redo buttons. -->
-    <!-- TODO: Uncomment this when undo/redo are fixed. -->
-    <!--
-      <button id="undoButton" disabled>Undo</button>
-      <button id="redoButton" disabled>Redo</button>
-      <br />
-    -->
-
-    <!-- Text area that will be used for our collaborative chat box. -->
-    <textarea id="chatbox" style="width: 26%; height: 12em" disabled="true"></textarea>
-
-  </div>
 </body>
 </html>
