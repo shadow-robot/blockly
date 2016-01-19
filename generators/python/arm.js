@@ -5,7 +5,7 @@ Blockly.Python['arm'] = function(block) {
   var value_displacement = Blockly.Python.valueToCode(block, 'displacement', Blockly.Python.ORDER_ATOMIC);
 
   var code = "";
-  code += "dropdown_axis = " + dropdown_axis.toString() + "\n";
+  code += "dropdown_axis = \"" + dropdown_axis.toString() + "\"\n";
   code += "text_displacement = " + text_displacement.toString() + "\n";
 
 
