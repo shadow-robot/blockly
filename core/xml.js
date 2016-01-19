@@ -62,7 +62,7 @@ Blockly.Xml.workspaceToDom = function(workspace) {
 Blockly.Xml.blockToDom_ = function(block) {
   var element = goog.dom.createDom(block.isShadow() ? 'shadow' : 'block');
   element.setAttribute('type', block.type);
-  if (Blockly.Realtime.isEnabled()) {
+  if (false) {
     // Only used by realtime.
     element.setAttribute('id', block.id);
   }
@@ -99,8 +99,6 @@ Blockly.Xml.blockToDom_ = function(block) {
   }
 
   if (block.data) {
-    // Optional text data that round-trips beween blocks and XML.
-    // Has no effect.  May be used by 3rd parties for meta information.
     var dataElement = goog.dom.createDom('data', null, block.data);
     element.appendChild(dataElement);
   }
@@ -140,7 +138,7 @@ Blockly.Xml.blockToDom_ = function(block) {
   if (block.disabled) {
     element.setAttribute('disabled', true);
   }
-  if (!block.isDeletable()) {
+  if (!block.isDeletable() && !block.isShadow()) {
     element.setAttribute('deletable', false);
   }
   if (!block.isMovable() && !block.isShadow()) {
@@ -279,7 +277,8 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
   var childCount = xml.childNodes.length;
   for (var i = 0; i < childCount; i++) {
     var xmlChild = xml.childNodes[i];
-    if (xmlChild.nodeName.toLowerCase() == 'block') {
+    var name = xmlChild.nodeName.toLowerCase();
+    if (name == 'block' || name == 'shadow') {
       var block = Blockly.Xml.domToBlock(workspace, xmlChild);
       var blockX = parseInt(xmlChild.getAttribute('x'), 10);
       var blockY = parseInt(xmlChild.getAttribute('y'), 10);
@@ -296,14 +295,11 @@ Blockly.Xml.domToWorkspace = function(workspace, xml) {
  * workspace.
  * @param {!Blockly.Workspace} workspace The workspace.
  * @param {!Element} xmlBlock XML block element.
- * @param {boolean=} opt_reuseBlock Optional arg indicating whether to
- *     reinitialize an existing block.
  * @return {!Blockly.Block} The root block created.
  */
-Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
+Blockly.Xml.domToBlock = function(workspace, xmlBlock) {
   // Create top-level block.
-  var topBlock = Blockly.Xml.domToBlockHeadless_(workspace, xmlBlock,
-                                                 opt_reuseBlock);
+  var topBlock = Blockly.Xml.domToBlockHeadless_(workspace, xmlBlock);
   if (workspace.rendered) {
     // Hide connections to speed up assembly.
     topBlock.setConnectionsHidden(true);
@@ -335,37 +331,17 @@ Blockly.Xml.domToBlock = function(workspace, xmlBlock, opt_reuseBlock) {
  * workspace.
  * @param {!Blockly.Workspace} workspace The workspace.
  * @param {!Element} xmlBlock XML block element.
- * @param {boolean=} opt_reuseBlock Optional arg indicating whether to
- *     reinitialize an existing block.
  * @return {!Blockly.Block} The root block created.
  * @private
  */
-Blockly.Xml.domToBlockHeadless_ =
-    function(workspace, xmlBlock, opt_reuseBlock) {
+Blockly.Xml.domToBlockHeadless_ = function(workspace, xmlBlock) {
   var block = null;
   var prototypeName = xmlBlock.getAttribute('type');
   if (!prototypeName) {
     throw 'Block type unspecified: \n' + xmlBlock.outerHTML;
   }
   var id = xmlBlock.getAttribute('id');
-  if (opt_reuseBlock && id) {
-    // Only used by realtime.
-    block = Blockly.Block.getById(id, workspace);
-    // TODO: The following is for debugging.  It should never actually happen.
-    if (!block) {
-      throw 'Couldn\'t get Block with id: ' + id;
-    }
-    var parentBlock = block.getParent();
-    // If we've already filled this block then we will dispose of it and then
-    // re-fill it.
-    if (block.workspace) {
-      block.dispose(true, false, true);
-    }
-    block.fill(workspace, prototypeName);
-    block.parent_ = parentBlock;
-  } else {
-    block = Blockly.Block.obtain(workspace, prototypeName);
-  }
+  block = workspace.newBlock(prototypeName, id);
 
   var blockChild = null;
   for (var i = 0, xmlChild; xmlChild = xmlBlock.childNodes[i]; i++) {
@@ -410,7 +386,7 @@ Blockly.Xml.domToBlockHeadless_ =
       case 'comment':
         block.setCommentText(xmlChild.textContent);
         var visible = xmlChild.getAttribute('pinned');
-        if (visible) {
+        if (visible && !block.isInFlyout) {
           // Give the renderer a millisecond to render and position the block
           // before positioning the comment bubble.
           setTimeout(function() {
@@ -427,8 +403,6 @@ Blockly.Xml.domToBlockHeadless_ =
         }
         break;
       case 'data':
-        // Optional text data that round-trips beween blocks and XML.
-        // Has no effect.  May be used by 3rd parties for meta information.
         block.data = xmlChild.textContent;
         break;
       case 'title':
@@ -456,7 +430,7 @@ Blockly.Xml.domToBlockHeadless_ =
         }
         if (childBlockNode) {
           blockChild = Blockly.Xml.domToBlockHeadless_(workspace,
-              childBlockNode, opt_reuseBlock);
+              childBlockNode);
           if (blockChild.outputConnection) {
             input.connection.connect(blockChild.outputConnection);
           } else if (blockChild.previousConnection) {
@@ -478,7 +452,7 @@ Blockly.Xml.domToBlockHeadless_ =
             throw 'Next statement is already connected.';
           }
           blockChild = Blockly.Xml.domToBlockHeadless_(workspace,
-              childBlockNode, opt_reuseBlock);
+              childBlockNode);
           if (!blockChild.previousConnection) {
             throw 'Next block does not have previous statement.';
           }
