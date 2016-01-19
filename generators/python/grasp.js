@@ -5,7 +5,7 @@ Blockly.Python['grasp'] = function(block) {
   var code = "";
 
   function readPythonFile(file)
-{
+  {
     var rawFile = new XMLHttpRequest();
     rawFile.open("GET", file, false);
     rawFile.onreadystatechange = function ()
@@ -19,8 +19,8 @@ Blockly.Python['grasp'] = function(block) {
         }
     }
     rawFile.send(null);
-}
-    readPythonFile("../blockly/generators/python/scripts/grasp.py");
+  }
+  readPythonFile("../blockly/generators/python/scripts/grasp.py");
 
   return code;
 };
