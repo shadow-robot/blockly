@@ -1,6 +1,7 @@
 import rospy
 from sr_robot_commander.sr_hand_commander import SrHandCommander
 
+<<<<<<< HEAD
 hand_commander = SrHandCommander()
 
 trajectory = [
@@ -13,3 +14,4 @@ trajectory = [
 
 # Run trajectory via moveit
 hand_commander.run_named_trajectory(trajectory)
+
