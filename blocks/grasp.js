@@ -2,11 +2,11 @@ Blockly.Blocks['grasp'] = {
   init: function() {
     this.appendDummyInput()
         .appendField("Grasp")
-        .appendField(new Blockly.FieldDropdown([["Pack", "pack"], ["Open", "open"], ["Victory", "victory"]]), "grasp_name");
+        .appendField(new Blockly.FieldDropdown([["Pack", "pack"], ["Open", "open"], ["Fingers packed, open thumb", "fingers_pack_thumb_open"]]), "grasp_name");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldTextInput("Interpolation time"), "time")
+        .appendField(new Blockly.FieldTextInput("3"), "time")
         .appendField("(s)")
-        .appendField(new Blockly.FieldTextInput("Pause"), "pause")
+        .appendField(new Blockly.FieldTextInput("1"), "pause")
         .appendField("(s)");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
