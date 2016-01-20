@@ -1,11 +1,15 @@
-
 Blockly.Blocks['grasp'] = {
   init: function() {
-    this.appendValueInput("NAME")
-        .setCheck("String")
-        .appendField(new Blockly.FieldTextInput("grasp_name"), "NAME");
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
+    this.appendDummyInput()
+        .appendField("Grasp")
+        .appendField(new Blockly.FieldDropdown([["Pack", "pack"], ["Open", "open"], ["Fingers packed, open thumb", "fingers_pack_thumb_open"]]), "grasp_name");
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldTextInput("3"), "time")
+        .appendField("(s)")
+        .appendField(new Blockly.FieldTextInput("1"), "pause")
+        .appendField("(s)");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
     this.setColour(306);
     this.setTooltip('');
     this.setHelpUrl('http://www.shadowrobot.com/');

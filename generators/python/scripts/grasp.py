@@ -1,5 +1,16 @@
 import rospy
+from sr_robot_commander.sr_hand_commander import SrHandCommander
 
-rospy.sleep(1.0)
+hand_commander = SrHandCommander()
 
-rospy.logerr("tutu")
+trajectory = [
+    {
+        'name': dropdown_grasp,
+        'interpolate_time': time,
+        'pause_time': pause
+    }
+]
+
+# Run trajectory via moveit
+hand_commander.run_named_trajectory(trajectory)
+
