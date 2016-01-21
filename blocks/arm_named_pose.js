@@ -1,0 +1,17 @@
+Blockly.Blocks['arm_named_pose'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Move arm to named pose:")
+        .appendField(new Blockly.FieldDropdown([["Home", "home"], ["Up", "up"]]), "arm_pose_name");
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldTextInput("3"), "time")
+        .appendField("(s)")
+        .appendField(new Blockly.FieldTextInput("1"), "pause")
+        .appendField("(s)");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(306);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.shadowrobot.com/');
+  }
+};
