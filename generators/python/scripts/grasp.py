@@ -1,7 +1,3 @@
-import rospy
-from sr_robot_commander.sr_hand_commander import SrHandCommander
-
-hand_commander = SrHandCommander()
 
 trajectory = [
     {
