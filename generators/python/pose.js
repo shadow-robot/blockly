@@ -10,24 +10,7 @@ Blockly.Python['pose'] = function(block) {
   code += "y_displacement = " + text_y.toString() + "\n";
   code += "z_displacement = " + text_z.toString() + "\n";
 
-
-  function readPythonFile(file)
-  {
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", file, false);
-    rawFile.onreadystatechange = function ()
-    {
-        if(rawFile.readyState === 4)
-        {
-            if(rawFile.status === 200 || rawFile.status == 0)
-            {
-                code += rawFile.responseText;
-            }
-        }
-    }
-    rawFile.send(null);
-  }
-  readPythonFile("../blockly/generators/python/scripts/pose.py");
+  code += Blockly.readPythonFile("../blockly/generators/python/scripts/pose.py");
 
   return code;
 };

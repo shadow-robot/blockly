@@ -577,6 +577,24 @@ Blockly.genUid = function() {
   return id.join('');
 };
 
+Blockly.readPythonFile = function(file) {
+    var rawFile = new XMLHttpRequest();
+    var code = "";
+    rawFile.open("GET", file, false);
+    rawFile.onreadystatechange = function ()
+    {
+        if(rawFile.readyState === 4)
+        {
+            if(rawFile.status === 200 || rawFile.status == 0)
+            {
+                code = rawFile.responseText;
+            }
+        }
+    }
+    rawFile.send(null);
+    return code;
+};
+
 /**
  * Determine if window.crypto or global.crypto exists.
  * @type {=RandomSource}

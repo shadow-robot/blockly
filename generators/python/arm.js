@@ -8,25 +8,7 @@ Blockly.Python['arm'] = function(block) {
   code += "dropdown_axis = \"" + dropdown_axis.toString() + "\"\n";
   code += "text_displacement = " + text_displacement.toString() + "\n";
 
-
-  function readPythonFile(file)
-  {
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", file, false);
-    rawFile.onreadystatechange = function ()
-    {
-        if(rawFile.readyState === 4)
-        {
-            if(rawFile.status === 200 || rawFile.status == 0)
-            {
-                code += rawFile.responseText;
-            }
-        }
-    }
-    rawFile.send(null);
-  }
-  readPythonFile("../blockly/generators/python/scripts/arm.py");
-
+  code += Blockly.readPythonFile("../blockly/generators/python/scripts/arm.py");
 
   return code;
 };
