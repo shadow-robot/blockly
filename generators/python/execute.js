@@ -1,4 +1,5 @@
 Blockly.Python['execute'] = function(block) {
-  var code = '.execute()';
+//  commander will be defined in the section where the plan is generated
+  var code = 'commander.execute()';
   return code;
 };
