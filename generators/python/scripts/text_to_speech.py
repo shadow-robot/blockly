@@ -12,7 +12,6 @@ if text_to_speech_initialization:
 
     text_to_speech_initialization = False
 
-    rospy.init_node("text_to_speech_node", anonymous=True)
     sound_handle = SoundClient()
     rospy.sleep(1)
 
