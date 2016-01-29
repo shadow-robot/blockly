@@ -5,9 +5,15 @@ Blockly.Python['word_list'] = function(block) {
   var text_word_4 = block.getFieldValue('word_4');
   var text_word_5 = block.getFieldValue('word_5');
 
-  var code = "";
+  var code = "words_to_recognize = [" +
+      "'" +  text_word_1 + "'," +
+      "'" +  text_word_2 + "'," +
+      "'" +  text_word_3 + "'," +
+      "'" +  text_word_4 + "'," +
+      "'" +  text_word_5 + "'" +
+      "]\n";
 
-  code += Blockly.readPythonFile("../blockly/generators/python/scripts/word_list");
+  code += Blockly.readPythonFile("../blockly/generators/python/scripts/word_list.py");
 
   return code;
 };
