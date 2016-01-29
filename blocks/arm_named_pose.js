@@ -1,8 +1,8 @@
-Blockly.Blocks['grasp'] = {
+Blockly.Blocks['arm_named_pose'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("Grasp")
-        .appendField(new Blockly.FieldDropdown([["Pack", "pack"], ["Open", "open"], ["Fingers packed, open thumb", "fingers_pack_thumb_open"]]), "grasp_name");
+        .appendField("Move arm to named pose:")
+        .appendField(new Blockly.FieldDropdown([["Home", "home"], ["Up", "up"]]), "arm_pose_name");
     this.appendDummyInput()
         .appendField("Interpolation time: ")
         .appendField(new Blockly.FieldTextInput("3"), "time")

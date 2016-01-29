@@ -1,7 +1,3 @@
-import rospy
-from sr_robot_commander.sr_arm_commander import SrArmCommander
-
-arm_commander = SrArmCommander(set_ground=False)
 
 rospy.sleep(2.0)
 

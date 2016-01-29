@@ -8,25 +8,39 @@ Blockly.Python['arm'] = function(block) {
   code += "dropdown_axis = \"" + dropdown_axis.toString() + "\"\n";
   code += "text_displacement = " + text_displacement.toString() + "\n";
 
+  code += Blockly.readPythonFile("../blockly/generators/python/scripts/arm.py");
 
-  function readPythonFile(file)
-  {
-    var rawFile = new XMLHttpRequest();
-    rawFile.open("GET", file, false);
-    rawFile.onreadystatechange = function ()
-    {
-        if(rawFile.readyState === 4)
-        {
-            if(rawFile.status === 200 || rawFile.status == 0)
-            {
-                code += rawFile.responseText;
-            }
-        }
-    }
-    rawFile.send(null);
-  }
-  readPythonFile("../blockly/generators/python/scripts/arm.py");
+  return code;
+};
 
+Blockly.Python['arm_named_pose'] = function(block) {
+  var dropdown_named_pose = block.getFieldValue('arm_pose_name');
+  var text_time = block.getFieldValue('time');
+  var text_pause = block.getFieldValue('pause');
+
+  var code = "";
+  code += "dropdown_named_pose = '" + dropdown_named_pose.toString() + "'" + "\n";
+  code += "time = " + text_time.toString() + "\n";
+  code += "pause = " + text_pause.toString() + "\n";
+
+  code += Blockly.readPythonFile("../blockly/generators/python/scripts/arm_named_pose.py");
+
+  return code;
+};
+
+Blockly.Python['pose'] = function(block) {
+  var dropdown_wait = block.getFieldValue('wait');
+  var text_x = block.getFieldValue('x');
+  var text_y = block.getFieldValue('y');
+  var text_z = block.getFieldValue('z');
+
+  var code = "";
+  code += "wait = \"" + dropdown_wait.toString() + "\"\n";
+  code += "x_displacement = " + text_x.toString() + "\n";
+  code += "y_displacement = " + text_y.toString() + "\n";
+  code += "z_displacement = " + text_z.toString() + "\n";
+
+  code += Blockly.readPythonFile("../blockly/generators/python/scripts/pose.py");
 
   return code;
 };
