@@ -1,5 +1,4 @@
 import rospy
-from sound_play.libsoundplay import SoundClient
 
 try:
     if text_to_speech_initialization is not None:
@@ -12,7 +11,9 @@ if text_to_speech_initialization:
 
     text_to_speech_initialization = False
 
-    sound_handle = SoundClient()
-    rospy.sleep(1)
+    from sound_play.libsoundplay import SoundClient
 
+    sound_handle = SoundClient()
+
+rospy.sleep(1)
 sound_handle.say(text_command, "voice_kal_diphone")
