@@ -1,5 +1,3 @@
-import rospy
-import geometry_msgs.msg
 from sr_robot_commander.sr_arm_commander import SrArmCommander
 from sr_robot_commander.sr_hand_commander import SrHandCommander
 
