@@ -8,7 +8,7 @@ Blockly.Blocks['grasp'] = {
         .appendField(new Blockly.FieldTextInput("3"), "time")
         .appendField("s")
         .appendField("Pause: ")
-        .appendField(new Blockly.FieldTextInput("1"), "pause")
+        .appendField(new Blockly.FieldTextInput("0"), "pause")
         .appendField("s");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
