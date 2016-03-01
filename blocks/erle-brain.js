@@ -20,7 +20,8 @@
 /**
  * @fileoverview Blocks for Erle-Spider.
  * @author victor@erlerobot.com (Víctor Mayoral Vilches)
- */
+ * @author ahcorde@erlerobot.com (Alejandro Hernández Cordero)
+*/
 'use strict';
 
 goog.provide('Blockly.Blocks.brain');
@@ -61,3 +62,26 @@ Blockly.Blocks['turn_on_orange_led'] = {
   }
 };
 
+Blockly.Blocks['get_laser'] = {
+  init: function() {
+    this.appendValueInput("laser")
+        .appendField("Laser");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(0);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.erlerobotics.com/');
+  }
+};
+
+Blockly.Blocks['take_a_picture'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("Take a picture");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(0);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.erlerobotics.com/');
+  }
+};
