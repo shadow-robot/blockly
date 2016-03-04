@@ -44,3 +44,22 @@ Blockly.Python['pose'] = function(block) {
 
   return code;
 };
+
+Blockly.Python['arm_joint_target'] = function(block) {
+  var dropdown_joint_goal = block.getFieldValue('joint_goal');
+  var text_joint_pose_target = block.getFieldValue('joint_pose_target');
+  var text_time_to_target = block.getFieldValue('time_to_target');
+  var dropdown_wait = block.getFieldValue('wait');
+  var dropdown_angle = block.getFieldValue('angle');
+
+  var code = "";
+  code += "joint_goal = '" + dropdown_joint_goal.toString() + "'" + "\n";
+  code += "joint_pose_target = \"" + text_joint_pose_target.toString() + "\"" + "\n";
+  code += "time_to_target = " + text_time_to_target.toString() + "\n";
+  code += "wait = " + dropdown_wait.toString() + "\n";
+  code += "angle = " + dropdown_angle.toString() + "\n";
+
+  code += Blockly.readPythonFile("../blockly/generators/python/scripts/arm_joint_target.py");
+
+  return code;
+};
