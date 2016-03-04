@@ -1,9 +1,6 @@
 
 rospy.sleep(2.0)
 
-#rospy.logerr(str(dropdown_axis))
-#rospy.logerr(str(text_displacement))
-
 current_pose = arm_commander.get_current_pose()
 
 if "x_axis" is dropdown_axis:
