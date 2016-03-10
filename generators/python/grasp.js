@@ -28,6 +28,7 @@ Blockly.Python['hand_joint_target'] = function(block) {
   code += "angle = " + dropdown_angle.toString() + "\n";
 
   code += Blockly.readPythonFile("../blockly/generators/python/scripts/hand_joint_target.py");
+  code += "\n";
 
   return code;
 };
