@@ -41,6 +41,7 @@ if sys.version_info[0] != 2:
                   "You are using: " + sys.version)
 
 import errno, glob, httplib, json, os, re, subprocess, threading, urllib
+import rospkg
 
 
 def import_path(fullpath):
@@ -169,6 +170,8 @@ class Gen_compressed(threading.Thread):
   def __init__(self, search_paths):
     threading.Thread.__init__(self)
     self.search_paths = search_paths
+    rospack = rospkg.RosPack()
+    self.package_path = rospack.get_path('sr_blockly_blocks')
 
   def run(self):
     self.gen_core()
@@ -219,7 +222,7 @@ class Gen_compressed(threading.Thread):
     # Read in all the source files.
     # Add Blockly.Blocks to be compatible with the compiler.
     params.append(("js_code", "goog.provide('Blockly.Blocks');"))
-    filenames = glob.glob(os.path.join("blocks", "*.js"))
+    filenames = glob.glob(os.path.join(self.package_path, "blocks", "*.js"))
     for filename in filenames:
       f = open(filename)
       params.append(("js_code", "".join(f.readlines())))
@@ -245,8 +248,8 @@ class Gen_compressed(threading.Thread):
     # Add Blockly.Generator to be compatible with the compiler.
     params.append(("js_code", "goog.provide('Blockly.Generator');"))
     filenames = glob.glob(
-        os.path.join("generators", language, "*.js"))
-    filenames.insert(0, os.path.join("generators", language + ".js"))
+        os.path.join(self.package_path, "generators", language, "*.js"))
+    filenames.insert(0, os.path.join(self.package_path, "generators", language + ".js"))
     for filename in filenames:
       f = open(filename)
       params.append(("js_code", "".join(f.readlines())))
