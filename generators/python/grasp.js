@@ -8,7 +8,7 @@ Blockly.Python['grasp'] = function(block) {
   code += "time = " + text_time.toString() + "\n";
   code += "pause = " + text_pause.toString() + "\n";
 
-  code += Blockly.readPythonFile("../blockly/generators/python/scripts/grasp.py");
+  code += Blockly.readFile("../blockly/generators/python/scripts/grasp.py");
 
   return code;
 };
@@ -27,7 +27,7 @@ Blockly.Python['hand_joint_target'] = function(block) {
   code += "wait = " + dropdown_wait.toString() + "\n";
   code += "angle = " + dropdown_angle.toString() + "\n";
 
-  code += Blockly.readPythonFile("../blockly/generators/python/scripts/hand_joint_target.py");
+  code += Blockly.readFile("../blockly/generators/python/scripts/hand_joint_target.py");
   code += "\n";
 
   return code;
