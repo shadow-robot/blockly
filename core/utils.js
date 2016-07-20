@@ -577,7 +577,7 @@ Blockly.genUid = function() {
   return id.join('');
 };
 
-Blockly.readPythonFile = function(file) {
+Blockly.readFile = function(file) {
     var rawFile = new XMLHttpRequest();
     var code = "";
     rawFile.open("GET", file, false);
