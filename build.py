@@ -36,15 +36,12 @@
 #   msg/js/<LANG>.js for every language <LANG> defined in msg/js/<LANG>.json.
 
 import sys
-import rospy
-import fnmatch
 
 if sys.version_info[0] != 2:
     raise Exception("Blockly build only compatible with Python 2.x.\n"
                     "You are using: " + sys.version)
 
 import errno, glob, httplib, json, os, re, subprocess, threading, urllib
-import rospkg
 
 
 def import_path(fullpath):
@@ -175,11 +172,6 @@ class Gen_compressed(threading.Thread):
     def __init__(self, search_paths):
         threading.Thread.__init__(self)
         self.search_paths = search_paths
-        self.package_paths = []
-        self.rospack = rospkg.RosPack()
-        block_packages = rospy.get_param('block_packages')
-        for package in block_packages:
-            self.package_paths.append(self.rospack.get_path(package))
 
     def run(self):
         self.gen_core()
@@ -188,7 +180,6 @@ class Gen_compressed(threading.Thread):
         self.gen_generator("python")
         self.gen_generator("php")
         self.gen_generator("dart")
-        self.gen_blockly_html()
 
     def gen_core(self):
         target_filename = "blockly_compressed.js"
@@ -231,10 +222,7 @@ class Gen_compressed(threading.Thread):
         # Read in all the source files.
         # Add Blockly.Blocks to be compatible with the compiler.
         params.append(("js_code", "goog.provide('Blockly.Blocks');"))
-        filenames = []
-        for package in self.package_paths:
-            filenames += glob.glob(os.path.join(package, "blocks", "*.js"))
-
+        filenames = glob.glob(os.path.join("blocks", "*.js"))
         for filename in filenames:
             f = open(filename)
             params.append(("js_code", "".join(f.readlines())))
@@ -259,13 +247,9 @@ class Gen_compressed(threading.Thread):
         # Read in all the source files.
         # Add Blockly.Generator to be compatible with the compiler.
         params.append(("js_code", "goog.provide('Blockly.Generator');"))
-        filenames = []
-        for package in self.package_paths:
-            filenames += glob.glob(
-                os.path.join(package, "generators", language, "*.js"))
-
-        default_path = [i for i in self.package_paths if str.endswith(i, "default_blocks")]
-        filenames.insert(0, os.path.join(default_path[0], "generators", language + ".js"))
+        filenames = glob.glob(
+            os.path.join("generators", language, "*.js"))
+        filenames.insert(0, os.path.join("generators", language + ".js"))
         for filename in filenames:
             f = open(filename)
             params.append(("js_code", "".join(f.readlines())))
@@ -275,43 +259,6 @@ class Gen_compressed(threading.Thread):
         # Remove Blockly.Generator to be compatible with Blockly.
         remove = "var Blockly={Generator:{}};"
         self.do_compile(params, target_filename, filenames, remove)
-
-    def gen_blockly_html(self):
-        robot_blockly_path = self.rospack.get_path("robot_blockly")
-        # find each block package blockly.txt
-        xml_paths = []
-        for package in self.package_paths:
-            for root, dirnames, filenames in os.walk(package):
-                for filename in fnmatch.filter(filenames, 'blockly.txt'):
-                    xml_paths.append(os.path.join(root, filename))
-
-        template_file = robot_blockly_path + "/frontend/pages/blockly_template.html"
-
-        generated_file = robot_blockly_path + "/frontend/pages/blockly.html"
-        separation_string = "    <sep></sep>\n"
-        trigger = "<!--input blocks-->"
-        line_num = None
-        with open(template_file) as myFile:
-            for num, line in enumerate(myFile, 1):
-                if trigger in line:
-                    line_num = num
-
-        if not line_num:
-            print("FATAL ERROR: blockly_template.html not valid, blockly.html could not be generated.")
-            return
-
-        with open(generated_file, "rw+") as output:
-            with open(template_file, "rw+") as input:
-                for x in range(line_num):
-                    output.write(input.readline()) # skip past early lines
-                pos = input.tell()  # remember insertion position
-                input_remainder = input.read()  # cache the rest of f2
-                input.seek(pos)
-                for category_file in xml_paths:
-                    with open(category_file, "r") as xml_snippet:
-                        output.write(xml_snippet.read())
-                        output.write(separation_string)
-            output.write(input_remainder)
 
     def do_compile(self, params, target_filename, filenames, remove):
         # Send the request to Google.
