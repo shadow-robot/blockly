@@ -13,7 +13,7 @@ Blockly.Python['word_list'] = function(block) {
       "'" +  text_word_5 + "'" +
       "]\n";
 
-  code += Blockly.readPythonFile("../blockly/generators/python/scripts/word_list.py");
+  code += Blockly.readFile("../blockly/generators/python/scripts/word_list.py");
 
   return code;
 };
